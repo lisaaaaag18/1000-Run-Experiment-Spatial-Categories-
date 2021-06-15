@@ -81,8 +81,7 @@ def Auto_Ownership(filename):
     cars_list = []
     cars = {}
     households = {}
-    values_list = []
-    values_list2 = []
+    variables = Conversions('GTAModelV4ToPD.csv', 'PD_Spatial_Category_Conversion.csv')
            
               
                 
@@ -101,18 +100,18 @@ def Auto_Ownership(filename):
             
             else: #If the row is not the first row
                 cars_list.append(int(row[5]))
-                for i in range (0, len(Conversions('GTAModelV4ToPD.csv', 'PD_Spatial_Category_Conversion.csv')[0]), 1):
-                    for j in range (0, len(Conversions('GTAModelV4ToPD.csv', 'PD_Spatial_Category_Conversion.csv')[0][i]), 1):
-                        if (int(row[1]) == Conversions('GTAModelV4ToPD.csv', 'PD_Spatial_Category_Conversion.csv')[0][i][j]):
-                            for key, value in Conversions('GTAModelV4ToPD.csv', 'PD_Spatial_Category_Conversion.csv')[2].items():
-                                if Conversions('GTAModelV4ToPD.csv', 'PD_Spatial_Category_Conversion.csv')[0][i] == value:
+                for i in range (0, len(variables[0]), 1):
+                    for j in range (0, len(variables[0][i]), 1):
+                        if (int(row[1]) == variables[0][i][j]):
+                            for key, value in variables[2].items():
+                                if variables[2][i] == value:
                                     planning_district = key    
                                     
-                            for k in range (0, len(Conversions('GTAModelV4ToPD.csv', 'PD_Spatial_Category_Conversion.csv')[1]), 1):
-                                for l in range (0, len(Conversions('GTAModelV4ToPD.csv', 'PD_Spatial_Category_Conversion.csv')[1][k]), 1):
-                                    if (planning_district == Conversions('GTAModelV4ToPD.csv', 'PD_Spatial_Category_Conversion.csv')[1][k][l]):
-                                        for key, value in Conversions('GTAModelV4ToPD.csv', 'PD_Spatial_Category_Conversion.csv')[3].items():
-                                            if Conversions('GTAModelV4ToPD.csv', 'PD_Spatial_Category_Conversion.csv')[1][k] == value:
+                            for k in range (0, len(variables[1]), 1):
+                                for l in range (0, len(variables[1][k]), 1):
+                                    if (planning_district == variables[1][k][l]):
+                                        for key, value in variables[3].items():
+                                            if variables[1][k] == value:
                                                 spatial_category = key 
                                                 spatial_category_list.append(spatial_category)
 
