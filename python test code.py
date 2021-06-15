@@ -3,22 +3,7 @@ import math
 import matplotlib.pyplot as plt
 import numpy as np
 
-def Auto_Ownership(filename): 
-    '''
-    file --> dictionary
-
-    This function converts the zones where the houses are located into planning districts 
-    and then spatial categries. Then, it calculates the average amount of cars contained in
-    each household per spatial category. It returns a dictionary with the keys being the 
-    spatial category and the values being the avaerage amount of cars per household in that 
-    spatial category.
-
-    '''   
-    is_first_row = True #Flag to check if the row in the file is the first row. Initialized as true
-    spatial_category_list = []
-    cars_list = []
-    cars = {}
-    households = {}
+def Conversions(file1, file2):
     zones_list = []
     zone_to_pd = {}
     pd_list = []
@@ -28,10 +13,9 @@ def Auto_Ownership(filename):
     pd_list2 = []
     pd_list_for_sp = []
     values_list2 = []
-    pd_to_sp = {}
+    pd_to_sp = {}    
     
-    
-    with open('GTAModelV4ToPD.csv', 'r') as csv_file:
+    with open(file1, 'r') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         line_count = 0
         for conversion_row1 in csv_reader:   
@@ -55,7 +39,7 @@ def Auto_Ownership(filename):
         for k in range (0, max(pd_list)+1, 1):
             zone_to_pd[k] = values_list[k]
             
-    with open('PD_Spatial_Category_Conversion.csv', 'r') as csv_file1:
+    with open(file2, 'r') as csv_file1:
         csv_reader1 = csv.reader(csv_file1, delimiter=',')
         line_count1 = 0
         for conversion_row2 in csv_reader1:
@@ -76,8 +60,31 @@ def Auto_Ownership(filename):
             values_list2.append(pd_list_for_sp)
                     
         for k in range (0, max(sp_list) + 1, 1):
-            pd_to_sp[k] = values_list2[k]        
-                
+            pd_to_sp[k] = values_list2[k]   
+            
+            
+    return (values_list, values_list2, zone_to_pd, pd_to_sp)
+
+def Auto_Ownership(filename): 
+    '''
+    file --> dictionary
+
+    This function converts the zones where the houses are located into planning districts 
+    and then spatial categries. Then, it calculates the average amount of cars contained in
+    each household per spatial category. It returns a dictionary with the keys being the 
+    spatial category and the values being the avaerage amount of cars per household in that 
+    spatial category.
+
+    '''   
+    is_first_row = True #Flag to check if the row in the file is the first row. Initialized as true
+    spatial_category_list = []
+    cars_list = []
+    cars = {}
+    households = {}
+    values_list = []
+    values_list2 = []
+           
+              
                 
 
                 
@@ -94,18 +101,18 @@ def Auto_Ownership(filename):
             
             else: #If the row is not the first row
                 cars_list.append(int(row[5]))
-                for i in range (0, len(values_list), 1):
-                    for j in range (0, len(values_list[i]), 1):
-                        if (int(row[1]) == values_list[i][j]):
-                            for key, value in zone_to_pd.items():
-                                if values_list[i] == value:
+                for i in range (0, len(Conversions('GTAModelV4ToPD.csv', 'PD_Spatial_Category_Conversion.csv')[0]), 1):
+                    for j in range (0, len(Conversions('GTAModelV4ToPD.csv', 'PD_Spatial_Category_Conversion.csv')[0][i]), 1):
+                        if (int(row[1]) == Conversions('GTAModelV4ToPD.csv', 'PD_Spatial_Category_Conversion.csv')[0][i][j]):
+                            for key, value in Conversions('GTAModelV4ToPD.csv', 'PD_Spatial_Category_Conversion.csv')[2].items():
+                                if Conversions('GTAModelV4ToPD.csv', 'PD_Spatial_Category_Conversion.csv')[0][i] == value:
                                     planning_district = key    
                                     
-                            for k in range (0, len(values_list2), 1):
-                                for l in range (0, len(values_list2[k]), 1):
-                                    if (planning_district == values_list2[k][l]):
-                                        for key, value in pd_to_sp.items():
-                                            if values_list2[k] == value:
+                            for k in range (0, len(Conversions('GTAModelV4ToPD.csv', 'PD_Spatial_Category_Conversion.csv')[1]), 1):
+                                for l in range (0, len(Conversions('GTAModelV4ToPD.csv', 'PD_Spatial_Category_Conversion.csv')[1][k]), 1):
+                                    if (planning_district == Conversions('GTAModelV4ToPD.csv', 'PD_Spatial_Category_Conversion.csv')[1][k][l]):
+                                        for key, value in Conversions('GTAModelV4ToPD.csv', 'PD_Spatial_Category_Conversion.csv')[3].items():
+                                            if Conversions('GTAModelV4ToPD.csv', 'PD_Spatial_Category_Conversion.csv')[1][k] == value:
                                                 spatial_category = key 
                                                 spatial_category_list.append(spatial_category)
 
